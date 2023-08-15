@@ -1,9 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { NextPageContext } from "next";
 import Image from "next/image";
 
-export default function ProductsPage({ ...pathname }: NextPageContext) {
+export default function ProductsPage() {
 	return (
 		<main className="grid xl:grid-cols-3 mx-auto pt-12 gap-6 md:grid-cols-2 grid-cols-1">
 			{[...new Array(25)].map((_, i) => (

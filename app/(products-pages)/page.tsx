@@ -1,8 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { NextPageContext } from "next";
 import Image from "next/image";
 
-export default function Home({ ...pathname }: NextPageContext) {
+export default function Home() {
 	return (
 		<main className="grid xl:grid-cols-3 mx-auto pt-12 gap-6 md:grid-cols-2 grid-cols-1">
 			<Card className="col-span-2 row-span-2">
