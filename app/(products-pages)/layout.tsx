@@ -1,6 +1,7 @@
-import Categories from "@/components/categories";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import Cart from "@/features/cart";
+import Categories from "@/features/categories";
 import Link from "next/link";
 import React from "react";
 
@@ -42,6 +43,7 @@ const ProductLayout = ({ children }: { children: React.ReactNode }) => {
 						</Button>
 					</li>
 				</ul>
+				<Cart />
 			</nav>
 			<Separator />
 			<div className="flex flex-row items-start justify-center">
