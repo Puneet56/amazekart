@@ -1,12 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import Cart from "@/features/cart";
-import Categories from "@/features/categories";
-import ProductsSort from "@/features/products-sort";
 import Link from "next/link";
 import React from "react";
 
-const ProductsLayout = ({ children }: { children: React.ReactNode }) => {
+const ProductLayout = ({ children }: { children: React.ReactNode }) => {
 	return (
 		<div>
 			<nav className="flex items-center justify-between h-16 px-8">
@@ -59,19 +57,9 @@ const ProductsLayout = ({ children }: { children: React.ReactNode }) => {
 				<Cart />
 			</nav>
 			<Separator />
-			<div className="flex flex-row items-start justify-center">
-				<div className="mt-8 mr-8 w-32 xl:mr-12 transition-all duration-300 text-right hidden lg:block">
-					<Categories />
-				</div>
-
-				<div className="lg:max-w-7xl max-w-[90vw]">{children}</div>
-
-				<div className="mt-8 ml-8 w-32 xl:mr-12 transition-all duration-300 hidden lg:block">
-					<ProductsSort />
-				</div>
-			</div>
+			<div className="w-full mx-auto max-w-[90vw] mt-4">{children}</div>
 		</div>
 	);
 };
 
-export default ProductsLayout;
+export default ProductLayout;

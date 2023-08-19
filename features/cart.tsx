@@ -9,12 +9,24 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from "@/components/ui/sheet";
+import { eventBus } from "@/lib/event-bus";
 import { ShoppingCart } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const Cart = () => {
+	const [cartOpen, setCartOpen] = useState(false);
+
+	useEffect(() => {
+		eventBus.subscribe("cart:open", () => setCartOpen(true));
+
+		return () => {
+			eventBus.unsubscribe("cart:open");
+		};
+	}, []);
+
 	return (
 		<>
-			<Sheet>
+			<Sheet open={cartOpen} onOpenChange={(open) => setCartOpen(open)}>
 				<SheetTrigger asChild>
 					<Button variant={"outline"} className="group shadow-md">
 						<ShoppingCart

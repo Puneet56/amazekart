@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 
-export default function Home() {
+export default async function Home() {
 	return (
 		<main className="grid xl:grid-cols-3 mx-auto pt-12 gap-6 md:grid-cols-2 grid-cols-1">
 			<Card className="col-span-2 row-span-2">
@@ -11,10 +11,10 @@ export default function Home() {
 						alt="Picture of the author"
 						width={1000}
 						height={1000}
+						priority
 					/>
 				</CardContent>
 			</Card>
-			<Card></Card>
 		</main>
 	);
 }
