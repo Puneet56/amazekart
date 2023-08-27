@@ -9,35 +9,43 @@ export default async function Home() {
 
 	return (
 		<main className="mx-auto">
-			<h2 className="text-2xl mt-8 mb-4">Featured</h2>
+			<div className="grid 2xl:grid-cols-3 mx-auto gap-6 md:grid-cols-2 grid-cols-1">
+				<h2 className="text-2xl mt-8 2xl:col-span-3 md:col-span-2 col-span-1">
+					Featured
+				</h2>
 
-			<div className="flex items-center justify-start gap-6 flex-wrap w-full transition-transform">
-				{products.hero.map((product) => (
-					<ProductCard {...product} key={product.id} />
+				{products.hero.map((product: any, i: number) => (
+					<ProductCard {...product} key={i} />
 				))}
 			</div>
 
-			<h2 className="text-2xl mt-8 mb-4">New Arrivals</h2>
+			<div className="grid 2xl:grid-cols-3 mx-auto gap-6 md:grid-cols-2 grid-cols-1">
+				<h2 className="text-2xl mt-8 2xl:col-span-3 md:col-span-2 col-span-1">
+					New Arrivals
+				</h2>
 
-			<div className="flex items-center justify-start gap-6 flex-wrap w-full transition-transform">
-				{products.newArrival.map((product) => (
-					<ProductCard {...product} key={product.id} />
+				{products.newArrival.map((product: any, i: number) => (
+					<ProductCard {...product} key={i} />
 				))}
 			</div>
 
-			<h2 className="text-2xl mt-8 mb-4">Trending</h2>
+			<div className="grid 2xl:grid-cols-3 mx-auto gap-6 md:grid-cols-2 grid-cols-1">
+				<h2 className="text-2xl mt-8 2xl:col-span-3 md:col-span-2 col-span-1">
+					Trending
+				</h2>
 
-			<div className="flex items-center justify-start gap-6 flex-wrap w-full transition-transform">
-				{products.trending.map((product) => (
-					<ProductCard {...product} key={product.id} />
+				{products.trending.map((product: any, i: number) => (
+					<ProductCard {...product} key={i} />
 				))}
 			</div>
 
-			<h2 className="text-2xl mt-8 mb-4">Best Sellers</h2>
+			<div className="grid 2xl:grid-cols-3 mx-auto gap-6 md:grid-cols-2 grid-cols-1">
+				<h2 className="text-2xl mt-8 2xl:col-span-3 md:col-span-2 col-span-1">
+					Best Sellers
+				</h2>
 
-			<div className="flex items-center justify-start gap-6 flex-wrap w-full transition-transform">
-				{products.bestSellers.map((product) => (
-					<ProductCard {...product} key={product.id} />
+				{products.bestSellers.map((product: any, i: number) => (
+					<ProductCard {...product} key={i} />
 				))}
 			</div>
 		</main>

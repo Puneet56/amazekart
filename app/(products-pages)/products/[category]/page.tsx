@@ -7,22 +7,20 @@ const ProductDetails = async ({
 }: {
 	params: { category: string; sort: string };
 }) => {
-	const product: ProductResponse[] = await getProductByCategory(
+	const products: ProductResponse[] = await getProductByCategory(
 		params.category
 	);
 
-	if (!product) throw new Error("Product not found");
+	if (!products) throw new Error("Product not found");
 
-	if (product.length === 0) throw new Error("Product not found");
+	if (products.length === 0) throw new Error("Product not found");
 
 	return (
-		<>
-			<div className="flex items-center mx-auto mt-8 justify-center gap-6 flex-wrap transition-transform">
-				{product.map((product: ProductResponse) => (
-					<ProductCard {...product} key={product.id} />
-				))}
-			</div>
-		</>
+		<main className="grid 2xl:grid-cols-3 mx-auto pt-12 gap-6 md:grid-cols-2 grid-cols-1">
+			{products.map((product: any, i: number) => (
+				<ProductCard {...product} key={i} />
+			))}
+		</main>
 	);
 };
 

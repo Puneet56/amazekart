@@ -73,7 +73,6 @@ export const getHomeProducts = async () => {
 
 export const getProducts = async () => {
 	const products = await prisma.product.findMany({
-		take: 10,
 		include: {
 			images: true,
 			tags: true,

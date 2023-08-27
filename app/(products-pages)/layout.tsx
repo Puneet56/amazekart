@@ -27,7 +27,7 @@ const ProductsLayout = ({ children }: { children: React.ReactNode }) => {
 						</Button>
 					</li>
 
-					<li>
+					<li className="hidden lg:inline-block">
 						<Button
 							asChild
 							variant="link"
@@ -37,7 +37,7 @@ const ProductsLayout = ({ children }: { children: React.ReactNode }) => {
 						</Button>
 					</li>
 
-					<li>
+					<li className="hidden lg:inline-block">
 						<Button
 							asChild
 							variant="link"
@@ -46,7 +46,8 @@ const ProductsLayout = ({ children }: { children: React.ReactNode }) => {
 							<Link href="/products/new-arrivals">New Arrivals</Link>
 						</Button>
 					</li>
-					<li>
+
+					<li className="hidden lg:inline-block">
 						<Button
 							asChild
 							variant="link"
@@ -64,7 +65,19 @@ const ProductsLayout = ({ children }: { children: React.ReactNode }) => {
 					<Categories />
 				</div>
 
-				<div className="lg:max-w-7xl max-w-[90vw] mx-auto">{children}</div>
+				<div className="lg:max-w-7xl max-w-[90vw] flex flex-col items-center justify-start">
+					{/* only visible on screen sizes below lg  */}
+					<div className="lg:hidden block w-full">
+						<Categories />
+					</div>
+
+					{/* only visible on screen sizes below lg  */}
+					<div className="lg:hidden block w-full">
+						<ProductsSort />
+					</div>
+
+					{children}
+				</div>
 
 				<div className="mt-8 ml-8 w-32 xl:mr-12 transition-all duration-300 hidden lg:block">
 					<ProductsSort />

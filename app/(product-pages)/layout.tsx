@@ -25,7 +25,7 @@ const ProductLayout = ({ children }: { children: React.ReactNode }) => {
 						</Button>
 					</li>
 
-					<li>
+					<li className="hidden lg:inline-block">
 						<Button
 							asChild
 							variant="link"
@@ -35,7 +35,7 @@ const ProductLayout = ({ children }: { children: React.ReactNode }) => {
 						</Button>
 					</li>
 
-					<li>
+					<li className="hidden lg:inline-block">
 						<Button
 							asChild
 							variant="link"
@@ -44,7 +44,8 @@ const ProductLayout = ({ children }: { children: React.ReactNode }) => {
 							<Link href="/products/new-arrivals">New Arrivals</Link>
 						</Button>
 					</li>
-					<li>
+
+					<li className="hidden lg:inline-block">
 						<Button
 							asChild
 							variant="link"

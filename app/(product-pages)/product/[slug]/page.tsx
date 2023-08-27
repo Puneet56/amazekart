@@ -44,11 +44,11 @@ const ProductDetails = async ({ params }: { params: { slug: string } }) => {
 
 			{relatedProducts && (
 				<>
-					<h2 className="lg:text-4xl pt-8 md:pb-3 md:text-2xl md:font-semibold">
+					<h2 className="text-2xl mt-8 mb-2 2xl:col-span-3 md:col-span-2 col-span-1">
 						Similar
 					</h2>
 
-					<div className="flex items-center justify-start gap-6 overflow-x-auto w-full h-96 transition-transform">
+					<div className="flex items-center justify-center gap-6 flex-wrap w-full h-96 transition-transform">
 						{relatedProducts.map((product) => (
 							<ProductCard {...product} key={product.id} />
 						))}
