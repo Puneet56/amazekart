@@ -1,13 +1,9 @@
 import { prisma } from "@/database/db";
-import { NextResponse } from "next/server";
 
-export async function GET(
-	request: Request,
-	{ params }: { params: { slug: string } }
-) {
+export const getProductBySlug = async (slug: string) => {
 	const product = await prisma.product.findUnique({
 		where: {
-			slug: params.slug,
+			slug: slug,
 		},
 		include: {
 			images: true,
@@ -16,8 +12,10 @@ export async function GET(
 	});
 
 	if (!product) {
-		console.log("Product not found");
-		return NextResponse.json({ error: "Product not found" }, { status: 404 });
+		return {
+			product: null,
+			relatedProducts: null,
+		};
 	}
 
 	let relatedProducts = await prisma.product.findMany({
@@ -55,5 +53,5 @@ export async function GET(
 		relatedProducts,
 	};
 
-	return NextResponse.json(response);
-}
+	return response;
+};

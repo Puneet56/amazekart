@@ -1,9 +1,11 @@
 import ProductCard from "@/features/product-card";
 import { HomeProductsResponse } from "@/types";
+import { getHomeProducts } from "./actions";
 
 export default async function Home() {
-	const result = await fetch("http://localhost:3000/api/home");
-	const products: HomeProductsResponse = await result.json();
+	const products: HomeProductsResponse = await getHomeProducts();
+
+	if (!products) throw new Error("Products not found");
 
 	return (
 		<main className="mx-auto">

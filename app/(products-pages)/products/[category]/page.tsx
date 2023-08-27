@@ -1,25 +1,19 @@
 import ProductCard from "@/features/product-card";
 import { ProductResponse } from "@/types";
-
-type Product = {
-	slug: string;
-	title: string;
-	description: string;
-	price: number;
-	images: string[];
-	tags: string[];
-};
+import { getProductByCategory } from "../../actions";
 
 const ProductDetails = async ({
 	params,
 }: {
 	params: { category: string; sort: string };
 }) => {
-	const result = await fetch(
-		`http://localhost:3000/api/products/${params.category}`
+	const product: ProductResponse[] = await getProductByCategory(
+		params.category
 	);
 
-	const product: ProductResponse[] = await result.json();
+	if (!product) throw new Error("Product not found");
+
+	if (product.length === 0) throw new Error("Product not found");
 
 	return (
 		<>

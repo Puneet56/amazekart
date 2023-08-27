@@ -1,8 +1,7 @@
 import { prisma } from "@/database/db";
 import { HomeProductsResponse } from "@/types";
-import { NextResponse } from "next/server";
 
-export async function GET() {
+export const getHomeProducts = async () => {
 	let response: HomeProductsResponse = {
 		hero: [],
 		trending: [],
@@ -69,5 +68,37 @@ export async function GET() {
 	response.newArrival = newArrival;
 	response.bestSellers = bestSellers;
 
-	return NextResponse.json(response);
-}
+	return response;
+};
+
+export const getProducts = async () => {
+	const products = await prisma.product.findMany({
+		take: 10,
+		include: {
+			images: true,
+			tags: true,
+		},
+	});
+
+	return products;
+};
+
+export const getProductByCategory = async (category: string) => {
+	let products = await prisma.product.findMany({
+		where: {
+			tags: {
+				some: {
+					name: {
+						contains: category,
+					},
+				},
+			},
+		},
+		include: {
+			images: true,
+			tags: true,
+		},
+	});
+
+	return products;
+};

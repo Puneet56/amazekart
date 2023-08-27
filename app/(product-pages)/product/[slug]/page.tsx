@@ -3,21 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import ProductCard from "@/features/product-card";
-import { ProductDetailResponse } from "@/types";
 import Image from "next/image";
+import { getProductBySlug } from "../../actions";
 
 const ProductDetails = async ({ params }: { params: { slug: string } }) => {
-	const result = await fetch(
-		`http://localhost:3000/api/product/${params.slug}`
-	);
+	const { product, relatedProducts } = await getProductBySlug(params.slug);
 
-	const { product, relatedProducts }: ProductDetailResponse =
-		await result.json();
-
-	console.log({
-		product,
-		relatedProducts,
-	});
+	if (!product) throw new Error("Product not found");
 
 	return (
 		<div className="w-full pb-64">
