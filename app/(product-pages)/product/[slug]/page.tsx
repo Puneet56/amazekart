@@ -1,31 +1,23 @@
+import AddToCart from "@/components/ui/add-to-cart";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import ProductCard from "@/features/product-card";
+import { ProductDetailResponse } from "@/types";
 import Image from "next/image";
-import AddToCart from "../../../../components/ui/add-to-cart";
-
-export type Product = {
-	slug: string;
-	title: string;
-	description: string;
-	price: number;
-	images: string[];
-	tags: string[];
-};
 
 const ProductDetails = async ({ params }: { params: { slug: string } }) => {
 	const result = await fetch(
 		`http://localhost:3000/api/product/${params.slug}`
 	);
 
-	const {
+	const { product, relatedProducts }: ProductDetailResponse =
+		await result.json();
+
+	console.log({
 		product,
-		otherProducts,
-	}: {
-		product: Product;
-		otherProducts: Product[];
-	} = await result.json();
+		relatedProducts,
+	});
 
 	return (
 		<div className="w-full pb-64">
@@ -33,7 +25,7 @@ const ProductDetails = async ({ params }: { params: { slug: string } }) => {
 				<CardContent className="p-4 col-span-3">
 					<Image
 						className="xl:max-h-[700px] max-h-[600px] aspect-[5_/_3] object-cover"
-						src={product.images[0]}
+						src={product.images[0].url}
 						alt={params.slug}
 						width={1000}
 						height={1000}
@@ -58,15 +50,19 @@ const ProductDetails = async ({ params }: { params: { slug: string } }) => {
 				</CardContent>
 			</Card>
 
-			<h2 className="lg:text-4xl pt-8 md:pb-3 md:text-2xl md:font-semibold">
-				Similar
-			</h2>
+			{relatedProducts && (
+				<>
+					<h2 className="lg:text-4xl pt-8 md:pb-3 md:text-2xl md:font-semibold">
+						Similar
+					</h2>
 
-			<div className="flex items-center justify-start gap-6 overflow-x-auto w-full h-96 transition-transform">
-				{otherProducts.map((product, i) => (
-					<ProductCard {...product} key={i} />
-				))}
-			</div>
+					<div className="flex items-center justify-start gap-6 overflow-x-auto w-full h-96 transition-transform">
+						{relatedProducts.map((product) => (
+							<ProductCard {...product} key={product.id} />
+						))}
+					</div>
+				</>
+			)}
 		</div>
 	);
 };

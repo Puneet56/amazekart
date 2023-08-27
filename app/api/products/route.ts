@@ -1,10 +1,21 @@
-import { data } from "@/database/data";
+import { prisma } from "@/database/db";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-	return NextResponse.json(data);
-}
+	const products = await prisma.product.findMany({
+		take: 10,
+		select: {
+			title: true,
+			description: true,
+			slug: true,
+			id: true,
+			price: true,
+			images: true,
+			tags: true,
+		},
+	});
 
-export async function POST(request: Request) {
-	return NextResponse.json(data);
+	console.log(products);
+
+	return NextResponse.json(products);
 }

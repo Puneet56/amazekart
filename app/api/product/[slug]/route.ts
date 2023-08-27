@@ -1,44 +1,59 @@
-import { data } from "@/database/data";
+import { prisma } from "@/database/db";
 import { NextResponse } from "next/server";
 
 export async function GET(
 	request: Request,
 	{ params }: { params: { slug: string } }
 ) {
-	console.log({ params });
+	const product = await prisma.product.findUnique({
+		where: {
+			slug: params.slug,
+		},
+		include: {
+			images: true,
+			tags: true,
+		},
+	});
 
-	const product = data.find((product) => product.slug === params.slug);
+	if (!product) {
+		console.log("Product not found");
+		return NextResponse.json({ error: "Product not found" }, { status: 404 });
+	}
 
-	const otherProducts = data.reduce((acc, product) => {
-		if (Math.random() > 0.5) {
-			// @ts-ignore
-			acc.push(product);
-			return acc;
-		}
-		return acc;
-	}, []);
+	let relatedProducts = await prisma.product.findMany({
+		where: {
+			tags: {
+				some: {
+					name: {
+						contains: product.tags[0].name,
+					},
+				},
+			},
+		},
+		take: 4,
+		skip: Math.floor(Math.random() * 10),
+		include: {
+			images: true,
+			tags: true,
+		},
+	});
+
+	if (!relatedProducts) {
+		console.log("No related products found");
+		relatedProducts = await prisma.product.findMany({
+			take: 4,
+			skip: Math.floor(Math.random() * 15),
+			include: {
+				images: true,
+				tags: true,
+			},
+		});
+	}
 
 	const response = {
 		product,
-		otherProducts,
+		relatedProducts,
 	};
 
-	if (product) {
-		return NextResponse.json(response);
-	}
-
-	return NextResponse.json({
-		product: {
-			slug: "ocean-blue-shirt",
-			title: "Ocean Blue Shirt",
-			description:
-				"Ocean blue cotton shirt with a narrow collar and buttons down the front and long sleeves. Comfortable fit and tiled kalidoscope patterns.",
-			price: 50,
-			images: [
-				"https://burst.shopifycdn.com/photos/young-man-in-bright-fashion_925x.jpg",
-			],
-			tags: ["men"],
-		},
-		otherProducts,
-	});
+	return NextResponse.json(response);
 }

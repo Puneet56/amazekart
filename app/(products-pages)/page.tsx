@@ -1,20 +1,43 @@
-import { Card, CardContent } from "@/components/ui/card";
-import Image from "next/image";
+import ProductCard from "@/features/product-card";
+import { HomeProductsResponse } from "@/types";
 
 export default async function Home() {
+	const result = await fetch("http://localhost:3000/api/home");
+	const products: HomeProductsResponse = await result.json();
+
 	return (
-		<main className="grid xl:grid-cols-3 mx-auto pt-12 gap-6 md:grid-cols-2 grid-cols-1">
-			<Card className="col-span-2 row-span-2">
-				<CardContent>
-					<Image
-						src="https://demo.vercel.store/_next/image?url=https%3A%2F%2Fcdn.shopify.com%2Fs%2Ffiles%2F1%2F0754%2F3727%2F7491%2Ffiles%2Ft-shirt-1.png%3Fv%3D1689798965&w=1920&q=75"
-						alt="Picture of the author"
-						width={1000}
-						height={1000}
-						priority
-					/>
-				</CardContent>
-			</Card>
+		<main className="mx-auto">
+			<h2 className="text-2xl mt-8 mb-4">Featured</h2>
+
+			<div className="flex items-center justify-start gap-6 flex-wrap w-full transition-transform">
+				{products.hero.map((product) => (
+					<ProductCard {...product} key={product.id} />
+				))}
+			</div>
+
+			<h2 className="text-2xl mt-8 mb-4">New Arrivals</h2>
+
+			<div className="flex items-center justify-start gap-6 flex-wrap w-full transition-transform">
+				{products.newArrival.map((product) => (
+					<ProductCard {...product} key={product.id} />
+				))}
+			</div>
+
+			<h2 className="text-2xl mt-8 mb-4">Trending</h2>
+
+			<div className="flex items-center justify-start gap-6 flex-wrap w-full transition-transform">
+				{products.trending.map((product) => (
+					<ProductCard {...product} key={product.id} />
+				))}
+			</div>
+
+			<h2 className="text-2xl mt-8 mb-4">Best Sellers</h2>
+
+			<div className="flex items-center justify-start gap-6 flex-wrap w-full transition-transform">
+				{products.bestSellers.map((product) => (
+					<ProductCard {...product} key={product.id} />
+				))}
+			</div>
 		</main>
 	);
 }

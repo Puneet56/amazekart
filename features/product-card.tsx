@@ -1,32 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { ProductResponse } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 
-type Product = {
-	slug: string;
-	title: string;
-	description: string;
-	price: number;
-	images: string[];
-	tags: string[];
-};
-
-const ProductCard = ({
-	description,
-	images,
-	price,
-	slug,
-	tags,
-	title,
-}: Product) => {
+const ProductCard = ({ images, price, slug, title }: ProductResponse) => {
 	return (
-		<Link href={`/product/${slug}`}>
+		<Link className="max-h-full" href={`/product/${slug}`}>
 			<Card className="max-w-sm w-96 h-[22rem] hover:border-blue-700 group transition-all duration-300 cursor-pointer overflow-hidden">
 				<CardContent className="p-0 h-60 flex items-center justify-center overflow-hidden">
 					<Image
 						className="group-hover:scale-105 transition-transform duration-300"
-						src={images[0]}
+						src={images[0].url}
 						alt="Product"
 						height={250}
 						width={360}

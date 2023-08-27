@@ -64,7 +64,7 @@ const ProductsLayout = ({ children }: { children: React.ReactNode }) => {
 					<Categories />
 				</div>
 
-				<div className="lg:max-w-7xl max-w-[90vw]">{children}</div>
+				<div className="lg:max-w-7xl max-w-[90vw] mx-auto">{children}</div>
 
 				<div className="mt-8 ml-8 w-32 xl:mr-12 transition-all duration-300 hidden lg:block">
 					<ProductsSort />
