@@ -13,9 +13,10 @@ import { eventBus } from "@/lib/event-bus";
 import { ProductResponse } from "@/types";
 import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-type CartItem = {
+export type CartItem = {
 	product: ProductResponse;
 	quantity: number;
 };
@@ -23,6 +24,7 @@ type CartItem = {
 const Cart = () => {
 	const [cartOpen, setCartOpen] = useState(false);
 	const [cartItems, setCartItems] = useState<CartItem[]>([]);
+	const router = useRouter();
 
 	useEffect(() => {
 		const cartItems = localStorage.getItem("cartItems");
@@ -115,11 +117,21 @@ const Cart = () => {
 		return total + item.quantity * item.product.price;
 	}, 0);
 
+	const cartItemsCount = cartItems.reduce((total, item) => {
+		return total + item.quantity;
+	}, 0);
+
 	return (
 		<>
 			<Sheet open={cartOpen} onOpenChange={(open) => setCartOpen(open)}>
 				<SheetTrigger asChild>
-					<Button variant={"outline"} className="group shadow-md">
+					<Button variant={"outline"} className="group shadow-md relative">
+						<span
+							className="w-5 flex items-center justify-center text-xs aspect-square 
+														rounded-full absolute -right-2 -top-2 bg-black border border-neutral-500"
+						>
+							{cartItemsCount}
+						</span>
 						<ShoppingCart
 							size={20}
 							className="group-hover:scale-110 transition-transform duration-150"
@@ -134,14 +146,17 @@ const Cart = () => {
 					<div className="flex h-full flex-col items-center justify-between">
 						<div className="flex h-full flex-col items-start justify-start mt-8 w-full gap-4">
 							{cartItems.map((item) => (
-								<div className="flex items-center justify-between w-full mb-4">
+								<div
+									key={item.product.id}
+									className="flex items-center justify-between w-full mb-4"
+								>
 									<div className="flex w-full items-center justify-start gap-4">
 										<Image
 											src={item.product.images[0].url}
 											alt={item.product.title}
 											className="w-16 h-16 object-cover rounded-lg"
-											width={64}
-											height={64}
+											width={128}
+											height={128}
 										/>
 										<div className="flex flex-col items-start justify-start">
 											<span className="text-neutral-300">
@@ -211,6 +226,7 @@ const Cart = () => {
 								<Button
 									size={"lg"}
 									className="bg-blue-600 hover:bg-blue-700 rounded-full text-white text-lg w-full mb-4"
+									onClick={() => router.push("/checkout")}
 								>
 									Proceed to checkout
 								</Button>

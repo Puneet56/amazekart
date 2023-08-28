@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
 const sortOptions = ["relevance", "price-low-to-high", "price-high-to-low"];
 
@@ -12,17 +12,19 @@ const nameMap = {
 };
 
 const ProductsSort = () => {
-	const pathName = usePathname();
+	let pathName = usePathname();
 
 	const params = useSearchParams();
 
 	let sort = "";
 
+	if (pathName === "/") {
+		pathName = "/products";
+	}
+
 	if (params.has("sort")) {
 		sort = params.get("sort") as string;
 	}
-
-	const router = useRouter();
 
 	return (
 		<div className="">

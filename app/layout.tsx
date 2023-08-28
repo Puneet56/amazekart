@@ -1,3 +1,4 @@
+import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import NextTopLoader from "nextjs-toploader";
 import "./globals.css";
@@ -13,9 +14,11 @@ export default function RootLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<html lang="en" className="dark">
-			<NextTopLoader showSpinner={false} />
-			<body className="bg-neutral-900 min-h-screen">{children}</body>
-		</html>
+		<ClerkProvider>
+			<html lang="en" className="dark">
+				<NextTopLoader showSpinner={false} />
+				<body className="bg-neutral-900 min-h-screen">{children}</body>
+			</html>
+		</ClerkProvider>
 	);
 }

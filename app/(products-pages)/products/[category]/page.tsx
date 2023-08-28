@@ -1,4 +1,4 @@
-import ProductCard from "@/features/product-card";
+import ProductList from "@/features/product-list";
 import { ProductResponse } from "@/types";
 import { getProductByCategory } from "../../actions";
 
@@ -32,9 +32,7 @@ const ProductDetails = async ({
 
 	return (
 		<main className="grid 2xl:grid-cols-3 mx-auto pt-12 gap-6 md:grid-cols-2 grid-cols-1">
-			{products.map((product: any, i: number) => (
-				<ProductCard {...product} key={i} />
-			))}
+			<ProductList products={products} />
 		</main>
 	);
 };

@@ -1,4 +1,4 @@
-import ProductCard from "@/features/product-card";
+import ProductList from "@/features/product-list";
 import { getProducts } from "../actions";
 
 export default async function ProductsPage() {
@@ -8,9 +8,7 @@ export default async function ProductsPage() {
 
 	return (
 		<main className="grid xl:grid-cols-3 mx-auto pt-12 gap-6 md:grid-cols-2 grid-cols-1">
-			{products.map((product: any, i: number) => (
-				<ProductCard {...product} key={i} />
-			))}
+			<ProductList products={products} />
 		</main>
 	);
 }
