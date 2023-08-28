@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import NextTopLoader from "nextjs-toploader";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -16,6 +17,7 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang="en" className="dark">
+			<NextTopLoader showSpinner={false} />
 			<body className="bg-neutral-900 min-h-screen">{children}</body>
 		</html>
 	);
