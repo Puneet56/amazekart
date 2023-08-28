@@ -2,6 +2,21 @@ import ProductCard from "@/features/product-card";
 import { ProductResponse } from "@/types";
 import { getProductByCategory } from "../../actions";
 
+export async function generateStaticParams() {
+	const categories = [
+		"trending",
+		"new-arrivals",
+		"best-sellers",
+		"apparels",
+		"jewellery",
+		"home-decor",
+	];
+
+	return categories.map((category) => ({
+		category,
+	}));
+}
+
 const ProductDetails = async ({
 	params,
 }: {

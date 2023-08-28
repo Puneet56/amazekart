@@ -1,3 +1,4 @@
+import { getProducts } from "@/app/(products-pages)/actions";
 import AddToCart from "@/components/ui/add-to-cart";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -5,6 +6,14 @@ import { Separator } from "@/components/ui/separator";
 import ProductCard from "@/features/product-card";
 import Image from "next/image";
 import { getProductBySlug } from "../../actions";
+
+export async function generateStaticParams() {
+	const products = await getProducts();
+
+	return products.map((product) => ({
+		slug: product.slug,
+	}));
+}
 
 const ProductDetails = async ({ params }: { params: { slug: string } }) => {
 	const { product, relatedProducts } = await getProductBySlug(params.slug);
