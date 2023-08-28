@@ -38,7 +38,7 @@ const ProductDetails = async ({ params }: { params: { slug: string } }) => {
 
 					<p className="text-lg">{product.description}</p>
 
-					<AddToCart />
+					<AddToCart product={product} />
 				</CardContent>
 			</Card>
 
