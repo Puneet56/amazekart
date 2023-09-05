@@ -15,7 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { CartItem } from "@/features/cart";
-import { useAuth } from "@clerk/nextjs";
+import { SignIn, useUser } from "@clerk/nextjs";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -61,15 +61,11 @@ const formSchema = z.object({
 export type UserDetail = z.infer<typeof formSchema>;
 
 export default function CheckoutPage() {
-	const { isLoaded, userId, sessionId, getToken } = useAuth();
-
-	console.log({
-		isLoaded,
-		userId,
-		sessionId,
-	});
-
 	const [cartItems, setCartItems] = useState<CartItem[]>([]);
+
+	const { isSignedIn, isLoaded, user } = useUser();
+
+	console.log(user);
 
 	useEffect(() => {
 		const cartItems = localStorage.getItem("cartItems");
@@ -123,8 +119,6 @@ export default function CheckoutPage() {
 	});
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {
-		console.log(values);
-
 		const cartDetails = cartItems.map((item) => ({
 			productId: item.product.id,
 			quantity: item.quantity,
@@ -132,20 +126,41 @@ export default function CheckoutPage() {
 
 		const response = await fetch("/api/checkout", {
 			method: "POST",
-			body: JSON.stringify({
-				email: values.email,
-				firstName: values.firstName,
-				lastName: values.lastName,
-				country: values.country,
-				address: values.address,
-				apartment: values.apartment,
-				city: values.city,
-				state: values.state,
-				cartDetails,
-			}),
+			body: JSON.stringify(cartDetails),
 		});
 
 		const data = await response.json();
+
+		const options = {
+			name: data.name,
+			currency: data.currency,
+			amount: data.amount,
+			order_id: data.id,
+			description: data.amountDesc,
+			handler: function (response: any) {
+				console.log(response);
+			},
+			prefill: {
+				name: values.firstName + " " + values.lastName,
+				email: user?.emailAddresses[0].emailAddress,
+			},
+		};
+
+		//@ts-ignore
+		const paymentObject = new window.Razorpay(options);
+		paymentObject.open();
+
+		paymentObject.on("payment.failed", function () {
+			alert("Payment failed. Please try again. Contact support for help");
+		});
+	}
+
+	if (!isLoaded) {
+		return <div>Loading...</div>;
+	}
+
+	if (!isSignedIn) {
+		return <SignIn afterSignInUrl={"/checkout"} />;
 	}
 
 	return (

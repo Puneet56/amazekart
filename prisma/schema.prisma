@@ -11,27 +11,46 @@ datasource db {
 }
 
 model Product {
-  id String @id @default(cuid())
-  slug String @unique
-  title String
+  id          String         @id @default(cuid())
+  slug        String         @unique
+  title       String
   description String
-  price Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  images ProductImage[] 
-  tags ProductTag[]
+  price       Int
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  images      ProductImage[]
+  tags        ProductTag[]
+
+  Orders OrderItem[]
 }
 
 model ProductImage {
-  id String @id @default(cuid())
-  url String
-  product Product @relation(fields: [productId], references: [id])
+  id        String  @id @default(cuid())
+  url       String
+  product   Product @relation(fields: [productId], references: [id])
   productId String
 }
 
 model ProductTag {
-  id String @id @default(cuid())
-  name String
-  product Product @relation( fields: [productId] ,references: [id])
+  id        String  @id @default(cuid())
+  name      String
+  product   Product @relation(fields: [productId], references: [id])
   productId String
+}
+
+model Orders {
+  id          String      @id @default(cuid())
+  orderDate   DateTime    @default(now())
+  orderStatus String
+  orderItems  OrderItem[]
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+  order     Orders  @relation(fields: [orderId], references: [id])
+  orderId   String
+  quantity  Int
+  price     Int
 }
