@@ -16,16 +16,12 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { CartItem } from "@/features/cart";
 import { SignIn, useUser } from "@clerk/nextjs";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 const formSchema = z.object({
-	email: z.string().email({
-		message: "Please enter a valid email.",
-	}),
-
 	firstName: z.string().nonempty({
 		message: "Please enter your first name.",
 	}),
@@ -62,10 +58,9 @@ export type UserDetail = z.infer<typeof formSchema>;
 
 export default function CheckoutPage() {
 	const [cartItems, setCartItems] = useState<CartItem[]>([]);
+	const [paymentLoading, setPaymentLoading] = useState(false);
 
 	const { isSignedIn, isLoaded, user } = useUser();
-
-	console.log(user);
 
 	useEffect(() => {
 		const cartItems = localStorage.getItem("cartItems");
@@ -148,7 +143,14 @@ export default function CheckoutPage() {
 
 		//@ts-ignore
 		const paymentObject = new window.Razorpay(options);
+
 		paymentObject.open();
+
+		paymentObject.on("payment.success", function (...args: any[]) {
+			console.log(args);
+
+			console.log("Payment success");
+		});
 
 		paymentObject.on("payment.failed", function () {
 			alert("Payment failed. Please try again. Contact support for help");
@@ -156,7 +158,11 @@ export default function CheckoutPage() {
 	}
 
 	if (!isLoaded) {
-		return <div>Loading...</div>;
+		return (
+			<div className="flex items-center justify-center h-80 w-full">
+				<Loader2 className="animate-spin" size={80} />
+			</div>
+		);
 	}
 
 	if (!isSignedIn) {
@@ -238,19 +244,6 @@ export default function CheckoutPage() {
 						className="gap-x-2 w-full gap-y-4 grid grid-cols-2"
 					>
 						<h2 className="text-3xl col-span-2">Shipping Details</h2>
-						<FormField
-							control={form.control}
-							name="email"
-							render={({ field }) => (
-								<FormItem className="col-span-2">
-									<FormLabel>Email</FormLabel>
-									<FormControl>
-										<Input placeholder="you@example.com" {...field} />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
 
 						<FormField
 							control={form.control}
