@@ -38,19 +38,41 @@ model ProductTag {
   productId String
 }
 
-model Orders {
-  id          String      @id @default(cuid())
-  orderDate   DateTime    @default(now())
-  orderStatus String
+model Order {
+  id          String         @id @default(cuid())
+  userId      String
+  orderDate   DateTime       @default(now())
+  orderStatus orderStatus    @default(PENDING)
   orderItems  OrderItem[]
+  address     AddressDetails @relation(fields: [addressId], references: [id])
+  addressId   String         @unique
+}
+
+enum orderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+model AddressDetails {
+  id        String @id @default(cuid())
+  firstName String
+  lastName  String
+  address   String
+  country   String
+  apartment String
+  city      String
+  state     String
+  orders    Order?
 }
 
 model OrderItem {
   id        String  @id @default(cuid())
   product   Product @relation(fields: [productId], references: [id])
   productId String
-  order     Orders  @relation(fields: [orderId], references: [id])
+  order     Order   @relation(fields: [orderId], references: [id])
   orderId   String
   quantity  Int
-  price     Int
 }

@@ -62,6 +62,14 @@ const Navbar = () => {
 				</li>
 			</ul>
 			<div className="flex gap-4 items-center justify-center">
+				<Button
+					asChild
+					variant="link"
+					className="text-primary/50 font-light hover:text-primary"
+				>
+					<Link href="/orders">Your orders</Link>
+				</Button>
+
 				{isSignedIn ? (
 					<UserButton
 						afterSignOutUrl={pathname === "/checkout" ? "/" : pathname}

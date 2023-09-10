@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
+import { NewOrder } from "@/app/api/checkout/route";
 import { Button } from "@/components/ui/button";
 import {
 	Form,
@@ -16,8 +17,10 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { CartItem } from "@/features/cart";
 import { SignIn, useUser } from "@clerk/nextjs";
+import axios from "axios";
 import { ArrowRight, Loader2 } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -59,6 +62,7 @@ export type UserDetail = z.infer<typeof formSchema>;
 export default function CheckoutPage() {
 	const [cartItems, setCartItems] = useState<CartItem[]>([]);
 	const [paymentLoading, setPaymentLoading] = useState(false);
+	const router = useRouter();
 
 	const { isSignedIn, isLoaded, user } = useUser();
 
@@ -119,42 +123,51 @@ export default function CheckoutPage() {
 			quantity: item.quantity,
 		}));
 
-		const response = await fetch("/api/checkout", {
-			method: "POST",
-			body: JSON.stringify(cartDetails),
-		});
-
-		const data = await response.json();
-
-		const options = {
-			name: data.name,
-			currency: data.currency,
-			amount: data.amount,
-			order_id: data.id,
-			description: data.amountDesc,
-			handler: function (response: any) {
-				console.log(response);
-			},
-			prefill: {
-				name: values.firstName + " " + values.lastName,
-				email: user?.emailAddresses[0].emailAddress,
-			},
+		const payload: NewOrder = {
+			cartDetails,
+			// @ts-ignore
+			userDetails: values,
 		};
 
-		//@ts-ignore
-		const paymentObject = new window.Razorpay(options);
+		console.log(payload);
 
-		paymentObject.open();
+		const { data } = await axios.post("/api/checkout", payload);
 
-		paymentObject.on("payment.success", function (...args: any[]) {
-			console.log(args);
+		console.log(data);
 
-			console.log("Payment success");
-		});
+		router.push(`/checkout/${data.orderId}`);
 
-		paymentObject.on("payment.failed", function () {
-			alert("Payment failed. Please try again. Contact support for help");
-		});
+		return;
+
+		// const options = {
+		// 	name: data.name,
+		// 	currency: data.currency,
+		// 	amount: data.amount,
+		// 	order_id: data.id,
+		// 	description: data.amountDesc,
+		// 	handler: function (response: any) {
+		// 		console.log(response);
+		// 	},
+		// 	prefill: {
+		// 		name: values.firstName + " " + values.lastName,
+		// 		email: user?.emailAddresses[0].emailAddress,
+		// 	},
+		// };
+
+		// //@ts-ignore
+		// const paymentObject = new window.Razorpay(options);
+
+		// paymentObject.open();
+
+		// paymentObject.on("payment.success", function (...args: any[]) {
+		// 	console.log(args);
+
+		// 	console.log("Payment success");
+		// });
+
+		// paymentObject.on("payment.failed", function () {
+		// 	alert("Payment failed. Please try again. Contact support for help");
+		// });
 	}
 
 	if (!isLoaded) {

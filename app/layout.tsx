@@ -26,8 +26,10 @@ export default function RootLayout({
 			}}
 		>
 			<html lang="en" className="dark">
-				<NextTopLoader showSpinner={false} />
-				<body className="bg-neutral-900 min-h-screen">{children}</body>
+				<body className="bg-neutral-900 min-h-screen">
+					<NextTopLoader showSpinner={false} />
+					{children}
+				</body>
 			</html>
 		</ClerkProvider>
 	);
